@@ -5,7 +5,8 @@ To determine whether it is possible to classify ultrasound images of the skin in
 
 
 ## Stages
-1. Search for features for which there are differences between groups - stages of disease (AK1, AK2, AK3)
-3. Sorting of features according to their statistical significance 
-4. Selection of classifiers and iterative search of the cut-off point for the ordered features and parameters
+1. Search for features for which there are differences between groups - stages of disease (AK1, AK2, AK3) for features that are easy to interprete by doctors (Krusgall-Wallis, 
+3. Sorting of features according to their statistical significance (MRMR)
+4. Selection of classifiers and iterative search of the cut-off point for the ordered features and search for parameters
+5. Heatmaps with classification results
 
