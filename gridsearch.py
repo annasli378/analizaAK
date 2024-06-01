@@ -9,7 +9,9 @@ import matplotlib
 import warnings
 warnings.filterwarnings('ignore')
 
+# Functions
 def read_fold(path_to_data_train, path_to_data_test, fold_k):
+    # read data from each folder
     X_train = pd.read_csv(path_to_data_train  + str(fold_k) + '_x_train.csv', header=None).values
     Y_train = pd.read_csv(path_to_data_train  + str(fold_k) + '_y_train.csv', header=None).values - 1
     X_test = pd.read_csv(path_to_data_test  + str(fold_k) + '_x_test.csv').values
@@ -17,21 +19,20 @@ def read_fold(path_to_data_train, path_to_data_test, fold_k):
     return X_train, Y_train, X_test, Y_test
 
 def svn_train(DANE_FOLDY, gamma, C,i, plot_acc=False):
-    # KFOLD
+    # load data from each fold
     all_preds = np.zeros(test_size)
     all_tru = np.zeros(test_size)
     cnt=0
-    #for train, test in kfold.split(X, Y):
     for k in range(0,kmax):
         X_train, Y_train, X_test, Y_test = DANE_FOLDY[k][0], DANE_FOLDY[k][1], DANE_FOLDY[k][2],DANE_FOLDY[k][3]
         X_fold = X_train[:, 0:i]
         Y_fold = Y_train
         X_test = X_test[:, 0:i]
-
+        # model SVM
         model = svm.SVC( gamma=gamma, C=C).fit(X_fold, Y_fold.ravel())
         preds_test = model.predict(X_test)
         if plot_acc: print(f'fold: {k}, acc: {metrics.balanced_accuracy_score(Y_test, preds_test)}')
-
+        # all prediction
         for c in range(0, len(preds_test)):
             all_preds[cnt] = preds_test[c]
             all_tru[cnt] = Y_test[c]
@@ -70,6 +71,7 @@ def cmap_map(function, cmap):
     return matplotlib.colors.LinearSegmentedColormap('colormap',cdict,1024)
 
 def print_confusion_matrix(y_true, y_pred, classifier_name, name_to_save):
+    # Confusion matrix for light pink confusion matices
     light_pink = cmap_map(lambda x: x/2 + 0.35, matplotlib.cm.pink)
     y_true = y_true + 1
     y_pred = y_pred + 1
@@ -79,7 +81,6 @@ def print_confusion_matrix(y_true, y_pred, classifier_name, name_to_save):
     fig, ax = plt.subplots(figsize=(4, 4))
     plt.title(classifier_name, fontsize = 14)
     ax = sns.heatmap(df_cmx, annot=True, fmt='g', square=True, cmap=light_pink)
-    #ax.set_ylim(len(set(y_true)), 0)
     plt.xlabel("Predicted classes", fontsize = 15, labelpad=3)
     plt.ylabel("True classes", fontsize = 16, labelpad=3)
     plt.savefig(path_to_save + name_to_save, transparent=True)
@@ -89,10 +90,9 @@ def print_confusion_matrix(y_true, y_pred, classifier_name, name_to_save):
     report = classification_report(y_true, y_pred,output_dict=True)
     report_df = pd.DataFrame(report).transpose()
     report_df.to_csv(path_to_save+ 'classification_report_' +  classifier_name +'.csv')
-
+    # Save prediction 
     save_results = pd.DataFrame(y_pred)
     save_results.to_csv(path_to_save+'wyniki_preds_' +  classifier_name +'.csv')
-
     save_results = pd.DataFrame(y_true)
     save_results.to_csv(path_to_save+'wyniki_true_' +  classifier_name +'.csv')
 
@@ -108,17 +108,15 @@ def iterative_svn(DANE_FOLDY):
   return svn_tmp
 
 path_folder = ""
-
-path_to_data_train = path_folder +  "/dermo_nn/k_"
-path_to_data_test = path_to_data_train 
-path_to_save = path_folder + "/dermo_nn/"
+path_to_data_train = path_folder +  "/k_"
+path_to_data_test = path_to_data_train # Here may be different test and train paths (different data modifications)
+path_to_save = path_folder + "/"
 kmax = 54 # number of folds - patients
 
-# tablica z foldami wszystkimi:
+# Table for data in each fold:
 DANE_FOLDY = []
 for k in range(0,kmax):
   DANE_FOLDY.append(read_fold(path_to_data_train,path_to_data_test, k+1))
-
 
 test_size = 0
 for k in range(0,kmax):
@@ -131,10 +129,7 @@ maxidx_svn = SVN_res['acc'].idxmax()
 print(
     f"SVN acc max: {SVN_res['acc'].iloc[maxidx_svn]}, number of features: {SVN_res['ft_num'].iloc[maxidx_svn]}, C: {SVN_res['C'].iloc[maxidx_svn]}, gamma: {SVN_res['gamma'].iloc[maxidx_svn]}")
 
-# 0,9101	41	0,01	0,01
-
-
-
+# Print pretty pink matrix 
 accsvn, sy_true, sy_pred = svn_train(DANE_FOLDY, gamma=SVN_res['gamma'].iloc[maxidx_svn], C=SVN_res['C'].iloc[maxidx_svn],i=SVN_res['ft_num'].iloc[maxidx_svn], plot_acc=True)
 print(accsvn)
 print_confusion_matrix(sy_true, sy_pred, 'SVN' , 'confusion_matrix_dermo_nn_hfus_SVN.png')
