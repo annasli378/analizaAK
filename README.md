@@ -37,3 +37,8 @@ Currently, the best results were obtained for the features obtained from the net
 - too few samples, especially from group 3,
 - no check on the influence of the test site on the results,
 - not checking how the characteristics depend on the patient himself
+
+# Bibliography
+[MRMR] https://www.mathworks.com/help/stats/fscmrmr.html
+[SMOTE] https://arxiv.org/pdf/1106.1813
+[SVM] https://scikit-learn.org/stable/modules/svm.html
