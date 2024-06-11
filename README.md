@@ -39,6 +39,9 @@ Currently, the best results were obtained for the features obtained from the net
 - not checking how the characteristics depend on the patient himself
 
 # Bibliography
+
 [MRMR] https://www.mathworks.com/help/stats/fscmrmr.html
+
 [SMOTE] https://arxiv.org/pdf/1106.1813
+
 [SVM] https://scikit-learn.org/stable/modules/svm.html
