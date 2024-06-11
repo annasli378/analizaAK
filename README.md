@@ -1,7 +1,7 @@
 # Statistical analysis of features from medical imaging of Actinic Keratosis
 
 ## Aim
-To determine whether it is possible to classify ultrasound images of the skin in relation to disease (Actinic Keratosis, AK) severity based on morphological and textural features
+To determine whether it is possible to classify ultrasound and dermatoscopic images of the skin in relation to disease (Actinic Keratosis, AK) severity based on morphological and textural features
 
 ## Data
 The dataset consisted of 163 pairs of AK lesion images (dermatoscopy and 20MHz HFUS) from 53 patients. The evaluation - classification into groups 1, 2 or 3 - was performed by 2 experts.
